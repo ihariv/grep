@@ -11,16 +11,15 @@ import (
 type Colour string
 
 var (
-	needText = []byte{}
-	Reset    = Colour("\033[0m")
-	Red      = Colour("\033[31m")
-	Green    = Colour("\033[32m")
-	Yellow   = Colour("\033[33m")
-	Blue     = Colour("\033[34m")
-	Magenta  = Colour("\033[35m")
-	Cyan     = Colour("\033[36m")
-	Gray     = Colour("\033[37m")
-	White    = Colour("\033[97m")
+	Reset   = Colour("\033[0m")
+	Red     = Colour("\033[31m")
+	Green   = Colour("\033[32m")
+	Yellow  = Colour("\033[33m")
+	Blue    = Colour("\033[34m")
+	Magenta = Colour("\033[35m")
+	Cyan    = Colour("\033[36m")
+	Gray    = Colour("\033[37m")
+	White   = Colour("\033[97m")
 )
 
 func ReadFromFileLine(name string, needText []byte, c Colour) *[]string {

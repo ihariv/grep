@@ -1,10 +1,8 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"grep/finder"
-	"io/fs"
 	"os"
 	time "time"
 )
@@ -28,22 +26,22 @@ type (
 
 func main() {
 
-	args := os.Args
+	args := os.Args[1:]
 	fmt.Println(args)
 	file := "."
-	if len(args) > 2 {
+	if len(args) > 1 {
 		file = args[len(args)-1]
 	}
-	if len(args) > 1 {
-		needText = []byte(args[1])
+	if len(args) > 0 {
+		needText = []byte(args[0])
 	} else {
 		return
 	}
 
 	timeStart := time.Now()
-	if ok, err := IsDir(file); err == nil && ok {
+	if ok, err := IsDir(file); err == nil && ok != nil && *ok {
 		ReadFromDir(file, needText)
-	} else if err == nil && !ok {
+	} else if err == nil && ok != nil && !*ok {
 		ReadFromFile(file, needText)
 	} else if err != nil {
 		fmt.Println(err)
@@ -57,7 +55,7 @@ func ReadFromFile(filename string, needText []byte) {
 	if filename == "" {
 		return
 	}
-	for _, line := range *finder.ReadFromFileLine(filename, needText, finder.Green) {
+	for _, line := range *finder.ReadFromFileLine(filename, needText, finder.Blue) {
 		fmt.Println(line)
 	}
 	return
@@ -71,7 +69,7 @@ func ReadFromDir(dirname string, needText []byte) error {
 
 	for _, e := range entries {
 		nameFile := e.Name()
-		if ok, _ := IsDir(nameFile); !ok {
+		if ok, err := IsDir(nameFile); err == nil && ok != nil && !*ok {
 			fmt.Println(string(finder.Green) + nameFile + string(finder.Reset))
 			for _, line := range *finder.ReadFromFileLine(e.Name(), needText, finder.Red) {
 				fmt.Println(line)
@@ -83,17 +81,18 @@ func ReadFromDir(dirname string, needText []byte) error {
 	return nil
 }
 
-func IsDir(filename string) (bool, error) {
+func IsDir(filename string) (*bool, error) {
 
+	res := false
 	s, err := os.Stat(filename)
 
-	if errors.Is(err, fs.ErrNotExist) {
-		return false, nil
+	if err != nil {
+		return nil, err
 	}
 
 	if s.IsDir() {
-		return true, nil
+		res = true
 	}
-	return false, err
+	return &res, err
 
 }
