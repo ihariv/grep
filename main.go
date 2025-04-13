@@ -11,15 +11,6 @@ import (
 
 var (
 	needText = []byte{}
-	Reset    = "\033[0m"
-	Red      = "\033[31m"
-	Green    = "\033[32m"
-	Yellow   = "\033[33m"
-	Blue     = "\033[34m"
-	Magenta  = "\033[35m"
-	Cyan     = "\033[36m"
-	Gray     = "\033[37m"
-	White    = "\033[97m"
 )
 
 type (
@@ -81,7 +72,7 @@ func ReadFromDir(dirname string, needText []byte) error {
 	for _, e := range entries {
 		nameFile := e.Name()
 		if ok, _ := IsDir(nameFile); !ok {
-			fmt.Println(Green + nameFile + Reset)
+			fmt.Println(string(finder.Green) + nameFile + string(finder.Reset))
 			for _, line := range *finder.ReadFromFileLine(e.Name(), needText) {
 				fmt.Println(line)
 			}
