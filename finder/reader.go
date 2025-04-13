@@ -8,22 +8,22 @@ import (
 	"strconv"
 )
 
-type color string
+type Colour string
 
 var (
 	needText = []byte{}
-	Reset    = color("\033[0m")
-	Red      = color("\033[31m")
-	Green    = color("\033[32m")
-	Yellow   = color("\033[33m")
-	Blue     = color("\033[34m")
-	Magenta  = color("\033[35m")
-	Cyan     = color("\033[36m")
-	Gray     = color("\033[37m")
-	White    = color("\033[97m")
+	Reset    = Colour("\033[0m")
+	Red      = Colour("\033[31m")
+	Green    = Colour("\033[32m")
+	Yellow   = Colour("\033[33m")
+	Blue     = Colour("\033[34m")
+	Magenta  = Colour("\033[35m")
+	Cyan     = Colour("\033[36m")
+	Gray     = Colour("\033[37m")
+	White    = Colour("\033[97m")
 )
 
-func ReadFromFileLine(name string, needText []byte) *[]string {
+func ReadFromFileLine(name string, needText []byte, c Colour) *[]string {
 
 	out := []string{}
 
@@ -40,7 +40,7 @@ func ReadFromFileLine(name string, needText []byte) *[]string {
 
 	line := 0
 
-	selected := "\033[31m" + string(needText) + "\033[0m"
+	selected := string(c) + string(needText) + string(Reset)
 	for fileScanner.Scan() {
 		line++
 		res = fileScanner.Bytes()

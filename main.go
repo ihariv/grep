@@ -57,7 +57,7 @@ func ReadFromFile(filename string, needText []byte) {
 	if filename == "" {
 		return
 	}
-	for _, line := range *finder.ReadFromFileLine(filename, needText) {
+	for _, line := range *finder.ReadFromFileLine(filename, needText, finder.Green) {
 		fmt.Println(line)
 	}
 	return
@@ -73,7 +73,7 @@ func ReadFromDir(dirname string, needText []byte) error {
 		nameFile := e.Name()
 		if ok, _ := IsDir(nameFile); !ok {
 			fmt.Println(string(finder.Green) + nameFile + string(finder.Reset))
-			for _, line := range *finder.ReadFromFileLine(e.Name(), needText) {
+			for _, line := range *finder.ReadFromFileLine(e.Name(), needText, finder.Red) {
 				fmt.Println(line)
 			}
 		}
