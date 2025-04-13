@@ -47,7 +47,7 @@ func ReadFromFileLine(name string, needText []byte, c Colour) *[]string {
 		prefix := ""
 		if x := bytes.Count(res, needText); x > 0 {
 			prefix += strconv.Itoa(line) + ":" + strconv.Itoa(x)
-			resSelected := bytes.ReplaceAll(res, needText, []byte(selected))
+			resSelected := bytes.Replace(res, needText, []byte(selected), x)
 			out = append(out, prefix+"|"+string(resSelected))
 		}
 	}
