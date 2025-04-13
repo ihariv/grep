@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"grep/finder"
 	"os"
-	time "time"
+	"time"
 )
 
 var (
