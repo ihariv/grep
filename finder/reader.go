@@ -36,14 +36,13 @@ func ReadFromFileLine(name string, needText []byte, c Colour) *[]string {
 	fileScanner := bufio.NewScanner(readFile)
 
 	fileScanner.Split(bufio.ScanLines)
-	res := []byte{}
 
 	line := 0
 
 	selected := string(c) + string(needText) + string(Reset)
 	for fileScanner.Scan() {
 		line++
-		res = fileScanner.Bytes()
+		res := fileScanner.Bytes()
 
 		prefix := ""
 		if x := bytes.Count(res, needText); x > 0 {
