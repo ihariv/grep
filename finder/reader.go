@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 )
@@ -22,22 +23,31 @@ var (
 	White   = Colour("\033[97m")
 )
 
+func ReadFromStdIn(needText []byte, c Colour) *[]string {
+	reader := bufio.NewReader(os.Stdin)
+	return ReadFromReaderLine(reader, needText, c)
+}
+
 func ReadFromFileLine(name string, needText []byte, c Colour) *[]string {
+	reader, err := os.Open(name)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	defer reader.Close()
+
+	return ReadFromReaderLine(reader, needText, c)
+}
+
+func ReadFromReaderLine(reader io.Reader, needText []byte, c Colour) *[]string {
 
 	out := []string{}
 
-	readFile, err := os.Open(name)
-	defer readFile.Close()
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	fileScanner := bufio.NewScanner(readFile)
+	fileScanner := bufio.NewScanner(reader)
 
 	fileScanner.Split(bufio.ScanLines)
 
 	line := 0
-
 	selected := string(c) + string(needText) + string(Reset)
 	for fileScanner.Scan() {
 		line++

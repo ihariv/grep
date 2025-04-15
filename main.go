@@ -29,22 +29,29 @@ func main() {
 	args := os.Args[1:]
 	fmt.Println(args)
 	file := "."
-	if len(args) > 1 {
-		file = args[len(args)-1]
-	}
 	if len(args) > 0 {
 		needText = []byte(args[0])
 	} else {
 		return
 	}
 
+	if len(args) > 1 {
+		file = args[len(args)-1]
+	} else {
+		file = ""
+	}
+
 	timeStart := time.Now()
-	if ok, err := IsDir(file); err == nil && ok != nil && *ok {
-		ReadFromDir(file, needText)
-	} else if err == nil && ok != nil && !*ok {
-		ReadFromFile(file, needText)
-	} else if err != nil {
-		fmt.Println(err)
+	if file == "" {
+		ReadFromStdIn(needText)
+	} else {
+		if ok, err := IsDir(file); err == nil && ok != nil && *ok {
+			ReadFromDir(file, needText)
+		} else if err == nil && ok != nil && !*ok {
+			ReadFromFile(file, needText)
+		} else if err != nil {
+			fmt.Println(err)
+		}
 	}
 
 	fmt.Println(time.Now().Sub(timeStart).String())
@@ -56,6 +63,14 @@ func ReadFromFile(filename string, needText []byte) {
 		return
 	}
 	for _, line := range *finder.ReadFromFileLine(filename, needText, finder.Blue) {
+		fmt.Println(line)
+	}
+	return
+}
+
+func ReadFromStdIn(needText []byte) {
+
+	for _, line := range *finder.ReadFromStdIn(needText, finder.Blue) {
 		fmt.Println(line)
 	}
 	return
